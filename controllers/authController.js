@@ -34,7 +34,7 @@ exports.login = async(req,res) => {
         const token = jwt.sign(
             {id: user.id},
             JWT_SECRET,
-            {expiresIn: '1hr'}
+            {expiresIn: '24hr'}
         )
         const {password: _, ...userData} = user.toJSON()
         res.json({token, user: userData})
