@@ -24,7 +24,13 @@ exports.addNewRecipe = async(req,res) => {
 }
 exports.findAllRecipe = async(req,res) => {
     try {
-        const recipe = await recipe_model.findAll()
+        const recipe = await recipe_model.findAll({
+            include: [{
+                model: user_model,
+                as: 'user',
+                attributes: ['first_name', 'last_name', 'email', 'profile_img']
+            }]
+        })
         res.json(recipe)
     } catch (error) {
         res.status(500).json({ message: 'Get recipe', error });
@@ -33,7 +39,10 @@ exports.findAllRecipe = async(req,res) => {
 exports.getRecipeByid = async(req,res) => {
     const {id} = req.params
     try {
-        const recipe = await recipe_model.findAndCountAll({where: {user_id: id}})
+        const recipe = await recipe_model.findAndCountAll({
+            where: {user_id: id},
+            include: [{model: user_model, as: 'user', attributes: ['first_name', 'last_name', 'email', 'profile_img']}]
+        })
         if(!recipe) {
             return res.status(404).json({ message: 'Recipe not found' });
         }

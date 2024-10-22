@@ -1,7 +1,7 @@
 const {DataTypes} = require('sequelize')
 const sequelize = require('../config/db')
 
-const userModel = sequelize.define('Users', {
+const userModel = sequelize.define('users', {
     first_name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -40,5 +40,8 @@ const userModel = sequelize.define('Users', {
     // updatedAt,
     // createdAt
 })
+
+// userModel.belongsTo(recipeModel, {foreignKey: 'user_id', as: 'recipe'})
+// recipeModel.hasMany(userModel, {foreignKey: 'id', as: 'user'})
 
 module.exports = userModel
