@@ -7,5 +7,6 @@ const authMiddleware = require('../middlewares/authMiddleware')
 router.get('/', authMiddleware, recipeController.findAllRecipe)
 router.get('/:id', authMiddleware, recipeController.getRecipeByid)
 router.post('/', authMiddleware,recipeController.addNewRecipe)
+router.delete('/:id', authMiddleware,recipeController.deleteRecipe)
 
 module.exports = router

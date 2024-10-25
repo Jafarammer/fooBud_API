@@ -52,3 +52,16 @@ exports.getRecipeByid = async(req,res) => {
         res.status(500).json({ message: 'Get my recipe', error });
     }
 }
+exports.deleteRecipe = async(req,res) => {
+    const {id} = req.params
+    try {
+        const items = await recipe_model.findOne({where: {recipe_id: id}})
+        if(!items) {
+            return res.status(404).json({message: 'Recipe not found'})
+        }
+        await items.destroy()
+        res.status(200).json({message: 'Deleted success'})
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred while deleting the recipe' });
+    }
+}
