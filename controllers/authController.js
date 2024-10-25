@@ -9,7 +9,7 @@ exports.register = async(req,res) => {
     const {first_name, last_name, email, password ,age, address} = req.body
     try {
         const hashedPassword = await bcrypt.hash(password,10)
-        const defaultProfileImage = 'user/upload/default-profile.jpg';
+        const defaultProfileImage = 'user/upload/default-profile.png';
         const defaultCoverImage = 'user/upload/default-cover.png';
         const profileImage = req.files.profileImage ? `user/upload/${req.files.profileImage[0].filename}` : defaultProfileImage;
         const coverImage = req.files.coverImage ? `user/upload/${req.files.coverImage[0].filename}` : defaultCoverImage;
