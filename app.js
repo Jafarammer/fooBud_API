@@ -17,6 +17,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use('/user/upload', express.static(path.join(__dirname, 'utils/uploads/profile')))
+app.use('/recipe/upload', express.static(path.join(__dirname, 'utils/uploads/recipe')))
 app.use('/api', routes);
 app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message });
