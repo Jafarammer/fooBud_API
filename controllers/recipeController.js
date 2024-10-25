@@ -3,19 +3,23 @@ const user_model = require('../models/userModel')
 const generateId = require('../utils/generateId')
 
 exports.addNewRecipe = async(req,res) => {
-    const {title,description,coverRecipe} = req.body
+    const {title,description} = req.body
     try {
         const user = await user_model.findOne({where: {id: req.userId}})
         const recipeId = generateId()
+        const cover = req.files.coverRecipe ? `recipe/upload/${req.files.coverRecipe[0].filename}` : null;
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
           }
+        if(cover == null) {
+            return res.status(404).json({ message: 'Cover recipe required' });
+        }
         const newRecipe = await recipe_model.create({
             user_id: req.userId,
             recipe_id: recipeId,
             title,
             description,
-            cover_recipe: coverRecipe
+            cover_recipe: cover
         })
         res.status(200).json({message: 'New recipe added', data: newRecipe})
     } catch (error) {
@@ -54,10 +58,11 @@ exports.getRecipeByid = async(req,res) => {
 }
 exports.deleteRecipe = async(req,res) => {
     const {id} = req.params
+    const userId = req.userId
     try {
-        const items = await recipe_model.findOne({where: {recipe_id: id}})
+        const items = await recipe_model.findOne({where: {recipe_id: id, user_id: userId}})
         if(!items) {
-            return res.status(404).json({message: 'Recipe not found'})
+            return res.status(404).json({error: 'Recipe not found or you do not have permission to delete this recipe'})
         }
         await items.destroy()
         res.status(200).json({message: 'Deleted success'})
